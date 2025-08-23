@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -40,5 +41,25 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function ($user) {
+            // Assign 'user' role by default to factory-created users
+            // Only if roles exist (to avoid errors during initial migration)
+            if (Role::where('name', 'user')->exists()) {
+                $user->assignRole('user');
+            }
+        });
+    }
+
+    public function admin(): static
+    {
+        return $this->afterCreating(function ($user) {
+            if (Role::where('name', 'admin')->exists()) {
+                $user->assignRole('admin');
+            }
+        });
     }
 }
