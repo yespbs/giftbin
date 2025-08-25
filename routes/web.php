@@ -33,4 +33,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     })->name('admin.dashboard');
 });
 
-Route::get('/events', App\Livewire\Events\EventsList::class)->name('events');
+Route::get('/admin/events', App\Livewire\Events\EventsList::class)->name('events');

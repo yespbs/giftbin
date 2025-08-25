@@ -25,7 +25,7 @@ class Wish extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
-        'metadata' => 'array',
+        'metadata' => 'json',
     ];
 
     public function event(): BelongsTo
@@ -37,6 +37,7 @@ class Wish extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 
     public function scopeActive($query)
     {
